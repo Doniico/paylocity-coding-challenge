@@ -47,6 +47,10 @@ export default function EmployeesDisplay(){
         setDisplayAddForm(false);
     }
 
+    function RemoveEmployee(employeeId){
+        setEmployees(employees.filter(e => e.Id !== employeeId));
+    }
+
     function UpdateEmployee(employee){
         const nextEmployees = employees.map(e => {
             if(e.Id === employee.Id){
@@ -60,16 +64,21 @@ export default function EmployeesDisplay(){
 
     return (
         <div className="container-fluid">
-            <div className="row  my-4">
+            <div className="row my-4">
                 <div className="col-sm">
-                    <button type="button" className="btn btn-success" onClick={() => setDisplayAddForm(true)}><h3>Add New</h3></button>
+                    <button type="button" className="btn btn-success text-end" onClick={() => setDisplayAddForm(true)}><h3>Add New</h3></button>
                 </div>
             </div>
             <AddForm isActive={displayAddForm} onSubmit={AddEmployee}/>
             <div className="row">
                 <ul className="list-group">
                     {employees.map((employee) => (
-                        <li key={employee.Id} className="list-group-item"><EmployeeInfo employee={employee} updateEmployee={UpdateEmployee}/></li>
+                        <li key={employee.Id} className="list-group-item">
+                            <EmployeeInfo 
+                                employee={employee} 
+                                updateEmployee={UpdateEmployee}
+                                removeEmployee={RemoveEmployee}/>
+                        </li>
                     ))}
                 </ul>
             </div>

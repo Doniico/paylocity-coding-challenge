@@ -1,8 +1,8 @@
 import { useState } from 'react';
 
-export default function EmployeeInfo({ employee, updateEmployee }){
+export default function EmployeeInfo({ employee, updateEmployee, removeEmployee }){
     const [showEdit, setShowEdit] = useState(false);
-    
+
     let annualDeductions = CalcDeductions();
 
     function CalcDeductions(){
@@ -58,6 +58,7 @@ export default function EmployeeInfo({ employee, updateEmployee }){
         });
     }
 
+
     function handleDependentElectChanged(dependentId){
         const nextDependents = employee.Dependents.map(dependent => {
             if(dependent.Id === dependentId)
@@ -98,6 +99,31 @@ export default function EmployeeInfo({ employee, updateEmployee }){
         updateEmployee(nextEmployee);
     }
 
+    function handleDeleteDependent(dependentId){
+        const nextDependents = employee.Dependents.filter(dependent => dependent.Id !== dependentId);
+        const nextEmployee = {
+            ...employee,
+            Dependents: nextDependents
+        };
+        updateEmployee(nextEmployee);
+    }
+
+    function handleAddDependent(){
+        const nextDependents = [
+            ...employee.Dependents,
+            {
+                "Id" : crypto.randomUUID(),
+                "Name": "",
+                "Elected": false
+            }
+        ];
+        const nextEmployee = {
+            ...employee,
+            Dependents: nextDependents
+        };
+        updateEmployee(nextEmployee);
+    }
+
     return (
         <div className="container-fluid my-0">
             <div className="row mt-2 mb-4">
@@ -122,6 +148,11 @@ export default function EmployeeInfo({ employee, updateEmployee }){
                 <div className="col">
                     <h4>Deductions / Year: ${annualDeductions}</h4>
                 </div>
+                {showEdit &&
+                    <div className="col-1">
+                        <button className="btn btn-danger btn-lg" onClick={() => removeEmployee(employee.Id)}>X</button>
+                    </div> 
+                }
             </div>
             <div className="row">
                 <ul className="list-group">
@@ -131,7 +162,7 @@ export default function EmployeeInfo({ employee, updateEmployee }){
                                 <div className="col-3">
                                     {showEdit ?
                                         <input className="form-control form-control-lg" type="text" value={employee.Name} onChange={e => handleNameChanged(e.target.value)} placeholder="Name"/> :
-                                        <h5>{employee.Name}</h5> 
+                                        <h5><b>{employee.Name}</b></h5> 
                                     }
                                 </div>
                                 <div className="col-2">
@@ -154,6 +185,11 @@ export default function EmployeeInfo({ employee, updateEmployee }){
                                 <div className="col-1">
                                     <h5>${CalcEmployeeAnnualCosts(employee)}</h5>
                                 </div>
+                                {showEdit &&
+                                    <div className="col-1">
+                                        <button className="btn btn-primary btn-lg" onClick={() => handleAddDependent()}>Add</button>
+                                    </div> 
+                                }
                             </div>
                         </div>
                     </li>
@@ -187,6 +223,11 @@ export default function EmployeeInfo({ employee, updateEmployee }){
                                     <div className="col-1">
                                         <h5>${CalcDependentAnnualCosts(dependent)}</h5>
                                     </div>
+                                    {showEdit &&
+                                        <div className="col-1">
+                                            <button className="btn btn-danger btn-lg" onClick={() => handleDeleteDependent(dependent.Id)}>X</button>
+                                        </div> 
+                                    }
                                 </div>
                             </div>
                         </li>
