@@ -47,6 +47,17 @@ export default function EmployeesDisplay(){
         setDisplayAddForm(false);
     }
 
+    function UpdateEmployee(employee){
+        const nextEmployees = employees.map(e => {
+            if(e.Id === employee.Id){
+                 return employee
+             } else {
+                return e;
+             }
+        });
+        setEmployees(nextEmployees);
+    }
+
     return (
         <div className="container-fluid">
             <div className="row  my-4">
@@ -58,7 +69,7 @@ export default function EmployeesDisplay(){
             <div className="row">
                 <ul className="list-group">
                     {employees.map((employee) => (
-                        <li key={employee.Id} className="list-group-item"><EmployeeInfo employee={employee}/></li>
+                        <li key={employee.Id} className="list-group-item"><EmployeeInfo employee={employee} updateEmployee={UpdateEmployee}/></li>
                     ))}
                 </ul>
             </div>
