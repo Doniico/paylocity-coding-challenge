@@ -1,0 +1,13 @@
+$body-bg: #f3f0eb;
+$container-max-widths: (
+    sm: 540px,
+    md: 720px,
+    lg: 1140px,
+    xl: 1320px,
+    xxl: 1680px,
+);
+$font-family-base: Verdana, Geneva, Tahoma, sans-serif;
+$headings-font-family: $font-family-base;
+//$headings-color: #ed2024;
+
+@import '../node_modules/bootstrap/scss/bootstrap.scss';
